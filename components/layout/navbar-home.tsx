@@ -49,30 +49,33 @@ const Navbar = ({
         { "shadow-md": transparent && isVisible }
       )}
     >
-      <Container className="">
-        <div className="flex items-center justify-between">
+      <Container className="relative">
+        <div className="flex items-center justify-between py-2">
           <div className="flex items-center">
             <Link
-              href={"/"}
-              className="flex items-center justify-center rounded-sm  text-primary-foreground"
+              href="/"
+              className="flex items-center justify-center text-primary-foreground"
             >
               <Image
-                className="h-14 w-full py-1"
+                className="h-[80px] w-full py-1"
                 src={siteInfo.logo}
                 alt={siteInfo.name}
-                height={500}
-                width={900}
+                height={306}
+                width={500}
               />
             </Link>
-            {/* Mobile menu button */}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="ml-4 lg:hidden focus:outline-none"
+              className="focus:outline-none"
               aria-label="toggle menu"
             >
               <svg
-                className="w-6 h-6"
+                className="w-6 h-6 text-gray-800 dark:text-white"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -87,19 +90,45 @@ const Navbar = ({
             </button>
           </div>
 
-          {/* Menu items */}
-          <div className={cn("flex gap-4 items-center")}>
-            <div
-              className={`flex-col ${
-                isOpen ? "flex" : "hidden"
-              } lg:flex lg:flex-row lg:items-center`}
-            >
+          {/* Desktop menu */}
+          <div className="hidden lg:flex gap-4 items-center">
+            {navLinks.map((link, index) => (
+              <Link
+                key={index}
+                href={link.href}
+                className={cn(
+                  "px-4 py-2 transition-colors duration-300 transform",
+                  pathname === link.href
+                    ? "bg-secondary text-white"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                )}
+              >
+                {link.name}
+              </Link>
+            ))}
+
+            {data?.user ? (
+              <NavUser side="bottom" />
+            ) : (
+              <Link href="/login">
+                <Button size="lg" className="rounded-none">
+                  LOGIN
+                </Button>
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile dropdown menu */}
+        {isOpen && (
+          <div className="lg:hidden absolute z-50 top-full left-0 w-full bg-white dark:bg-gray-800 shadow-md py-4 px-4">
+            <div className="flex flex-col space-y-2">
               {navLinks.map((link, index) => (
                 <Link
                   key={index}
                   href={link.href}
                   className={cn(
-                    "px-3 py-1  transition-colors duration-300 transform rounded-md lg:mt-0",
+                    "block px-4 py-2 text-sm font-medium transition-colors duration-200",
                     pathname === link.href
                       ? "bg-secondary text-white"
                       : "hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -108,21 +137,19 @@ const Navbar = ({
                   {link.name}
                 </Link>
               ))}
-            </div>
 
-            {data?.user ? (
-              <div className="">
+              {data?.user ? (
                 <NavUser side="bottom" />
-              </div>
-            ) : (
-              <Link href="/login">
-                <Button size="sm" className="mt-4 lg:mt-0">
-                  Login
-                </Button>
-              </Link>
-            )}
+              ) : (
+                <Link href="/login">
+                  <Button size="lg" className="w-full rounded-none">
+                    LOGIN
+                  </Button>
+                </Link>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </Container>
     </motion.nav>
   );
