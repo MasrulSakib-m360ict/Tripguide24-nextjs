@@ -479,9 +479,9 @@ const FlightSearch = ({
           <Button
             variant={"secondary"}
             type="submit"
-            className="search-button lg:mt-0"
+            className="search-button lg:mt-0 rounded-none"
           >
-            Search Flights
+            Search Trips
           </Button>
         </div>
       </form>
